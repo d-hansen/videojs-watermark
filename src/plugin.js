@@ -3,13 +3,14 @@ import videojs from 'video.js';
 // Default options for the plugin.
 const defaults = {
   position: 'top-right',
-  fadeTime: 3000,
+  fadeTime: null,
   url: undefined,
-  image: undefined
+  image: undefined,
+  text: undefined,
 };
 
 /**
- * Sets up the div, img and optional a tags for the plugin.
+ * Sets up the div, img or text and optional a tags for the plugin.
  *
  * @function setupWatermark
  * @param    {Player} player
@@ -19,11 +20,22 @@ const setupWatermark = (player, options) => {
   // Add a div and img tag
   const videoEl = player.el();
   const div = document.createElement('div');
-  const img = document.createElement('img');
+  let img;
+  let text;
 
   div.classList.add('vjs-watermark-content');
   div.classList.add(`vjs-watermark-${options.position}`);
-  img.src = options.image;
+
+  if (options.image) {
+    img = document.createElement('img');
+    img.src = options.image;
+  }
+
+  if (options.text) {
+    text = document.createElement('p');
+    text.innerText = options.text;
+    text.classList.add('vjs-watermark-text');
+  }
 
   // if a url is provided make the image link to that URL.
   if (options.url) {
@@ -31,15 +43,19 @@ const setupWatermark = (player, options) => {
 
     a.href = options.url;
     // if the user clicks the link pause and open a new window
-    a.onclick = (e) => {
+    a.onclick = function (e) {
       e.preventDefault();
       player.pause();
       window.open(options.url);
     };
-    a.appendChild(img);
+    if (img) { a.appendChild(img); }
+    if (text) { a.appendChild(text); }
     div.appendChild(a);
   } else {
-    div.appendChild(img);
+    // pass through any clicks on the div
+    div.onclick = function (e) { player.handleTechClick_(player.tech_); }
+    if (img) { div.appendChild(img); }
+    if (text) { div.appendChild(text); }
   }
   videoEl.appendChild(div);
 };
@@ -75,9 +91,7 @@ const onPlayerReady = (player, options) => {
   player.addClass('vjs-watermark');
 
   // if there is no image set just exit
-  if (!options.image) {
-    return;
-  }
+  if (!(options.image || options.text)) { return; }
   setupWatermark(player, options);
 
   // Setup watermark autofade

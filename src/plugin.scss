@@ -12,10 +12,18 @@
     display: block;
   }
   .vjs-watermark-content {
-    opacity: 0.99;
+    opacity: 0.8;
     position: absolute;
     padding: 5px;
     @include transition(visibility 1.0s, opacity 1.0s);
+    cursor: default;
+  }
+  .vjs-watermark-text {
+    font-family:courier,arial,sans-serif;
+    font-size:36px;
+    font-weight:400;
+    font-style:normal;
+    color: #E8E8E8;
   }
 
   // pre-defined positions
@@ -27,7 +35,12 @@
     left: 0;
     top: 0;
   }
-  // bottom set to 30px to account for controlbar
+  .vjs-watermark-top-center {
+    width: 100%;
+    top: 0;
+    text-align: center;
+  }
+  // bottom set to 30px to account for control bar
   .vjs-watermark-bottom-right {
     right: 0;
     bottom: 30px;
@@ -35,6 +48,11 @@
   .vjs-watermark-bottom-left {
     left: 0;
     bottom: 30px;
+  }
+  .vjs-watermark-bottom-center {
+    width: 100%;
+    bottom: 30px;
+    text-align: center;
   }
 
   //fade out when the user is not active and the video is playing.

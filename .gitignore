@@ -25,6 +25,9 @@ npm-debug.log*
 bower_components/
 node_modules/
 
+# NPM generated
+package-lock.json
+
 # Yeoman meta-data
 .yo-rc.json
 

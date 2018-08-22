@@ -29,6 +29,7 @@ const setupWatermark = (player, options) => {
   if (options.image) {
     img = document.createElement('img');
     img.src = options.image;
+    img.width = player.width_;
   }
 
   if (options.text) {
